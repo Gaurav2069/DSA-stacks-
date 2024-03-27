@@ -1,0 +1,40 @@
+/* 
+
+You are given an array 'a' of size 'n'.
+Print the Next Greater Element(NGE) for every element.
+The Next Greater Element for an element 'x' is the first element on the right side of 'x' in the array, which is greater than 'x'.
+If no greater elements exist to the right of 'x', consider the next greater element as -1.
+
+For example:
+Input: 'a' = [7, 12, 1, 20]
+
+Output: NGE = [12, 20, 20, -1]
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<int> nextGreaterElement(vector<int>& arr, int n)
+{
+	// Write your code here
+	vector<int> v;
+  stack<int> st;
+
+    for(int i = n-1; i >= 0; i--) {
+
+        while (!st.empty() && st.top() <= arr[i]) {
+            st.pop();
+        }
+
+        if (st.empty()) {
+            v.push_back(-1);
+        }
+
+        else {
+            v.push_back(st.top());
+        }
+        st.push(arr[i]);
+    }
+    reverse(v.begin(), v.end());
+    return v;
+}
