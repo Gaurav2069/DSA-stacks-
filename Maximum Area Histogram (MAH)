@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+//--------------------------------------------------------------------PART-1
+vector<int> NextSmallerElementRight(vector<int>&arr , int n){
+
+vector<int> v1;
+stack <<pair<int,int>> st1;
+
+for(int i=n-1; i>=0; i--){
+
+     while(!st1.empty() && st1.top().first()>=arr[i]){
+           st1.pop();
+     }
+     if(st1.empty()){
+        v1.push_back(-1);
+     }
+    else{
+       v1.push_back(st1.top().second());
+    }
+    st1.push(arr[i], i); 
+}
+
+reverse(v1.begin(),v1.end());
+return v1;
+}
+
+//-------------------------------------------------------------------------PART-2
+
+vector<int> NextSmallerElementLeft(vector<int>&arr , int n){
+
+vector<int> v2;
+stack <<pair<int,int>> st2;
+
+for(int i=0; i<n; i++){
+
+     while(!st2.empty() && st2.top().first()>=arr[i]){
+           st2.pop();
+     }
+     if(st2.empty()){
+        v2.push_back(-1);
+     }
+    else{
+       v2.push_back(st2.top().second());
+    }
+    st2.push(arr[i], i); 
+}
+
+//reverse(v1.begin(),v1.end());
+return v2;
+}
+
+//-------------------------------------------------------------PART-3
+
+int main(){
+
+    vector<int> arr = {100, 80, 60, 70, 60, 75, 85};
+    int n = arr.size();
+
+    vector<int> result1 = nextGreaterElementRight(arr, n);
+    vector<int> result2 = nextGreaterElementLeft(arr, n);
+    vector<int> width;
+    vector<int> area;
+
+    for (int i = 0; i < n; i++) {
+        width[i] = result1[i] - result2[i] - 1;
+    }
+
+    for (int i = 0; i < n; i++) {
+        area[i] = width[i] * arr[i];
+    }
+
+    //-------------------------------------------------------------PART-4
+
+    int largest = area[0];
+
+    for (int i = 0; i < n; i++) {
+        if(largest < area[i]){
+            largest = area[i];
+       }
+    }
+
+    //----------------------------------------------FINAL ANSWER
+    cout<< largest <<endl;
+
+}
