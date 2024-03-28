@@ -1,0 +1,85 @@
+/* 
+Given a rows x cols binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+
+1 0 1 0 0
+1 0 1 1 1
+1 1 1 1 1
+1 0 0 1 0
+
+*/
+
+//iss wale ques. me (stack <pair<int,int>> s1) -----> .first=index and .second=element hai.
+
+class Solution {
+public:
+int largestRectangleInHistogram(vector<int>& heights) {    
+        
+        
+        int n=heights.size();
+        
+        //Nearest Smallest To Left
+
+        stack <pair<int,int>> s1;
+        vector<int> nsl(n,-1);
+        for(int i=0;i<n;i++)
+        {
+            while(!s1.empty() && s1.top().second>=heights[i])
+                s1.pop();
+            
+            if(s1.empty())
+                nsl[i]=-1;
+            else 
+                nsl[i]=s1.top().first;
+            
+            s1.push({i,heights[i]});
+        }
+        
+
+        //Nearest Smallest To Right
+        stack<pair<int,int>> s2;
+        vector<int> nsr(n,n);
+        for(int i=n-1;i>=0;i--)
+        {
+            while(!s2.empty() && s2.top().second>=heights[i])
+                s2.pop();
+            
+            if(s2.empty())
+                nsr[i]=n;
+            else 
+                nsr[i]=s2.top().first;
+            
+            s2.push({i,heights[i]});
+        }
+        
+        
+        int ans=INT_MIN;
+        for(int i=0;i<n;i++)
+        {
+            int h=heights[i];
+            int w=nsr[i]-nsl[i]-1; //Width
+            int largestArea=w*h;  //Minus Beacuse it is added 2 times 
+            ans=max(ans,largestArea);
+        }
+        return ans;
+    }
+    
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int m=matrix.size();  //Number of Rows
+        int n=matrix[0].size();  //size of every row
+        vector<int> h(n,0);  //Stores 1-d histogram of level row in matrix
+        
+        int ans=0;
+        
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(matrix[i][j]=='0') h[j]=0;
+                else h[j]+=1;
+            }
+             int area=largestRectangleInHistogram(h);
+             ans=max(ans,area);
+        }
+        return ans;
+    }
+};
