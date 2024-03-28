@@ -1,0 +1,62 @@
+/* 
+
+The stock span problem is a financial problem where we have a series of N daily price quotes for a stock and we need to calculate the span of the stock’s price
+for all N days. The span Si of the stock’s price on a given day i is defined as the maximum number of consecutive days just before the given day, for which
+the price of the stock on the current day is less than or equal to its price on the given day. 
+
+Examples:
+
+Input: N = 7, price[] = [100 80 60 70 60 75 85]
+Output: 1 1 1 2 1 4 6
+
+*/
+
+solution-------------> relate this question with NEXT GREATER ELEMENT TO LEFT (NGL) <--------------
+
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<int> nextGreaterElement(vector<int>& arr, int n)
+{
+	// Write your code here
+	vector<int> v;
+  stack <pair<int,int>> st;
+
+    for(int i = 0; i < n; i++) {
+
+        while (!st.empty() && st.top().first() <= arr[i]) {
+            st.pop();
+        }
+
+        if (st.empty()) {
+            v.push_back(-1);
+        }
+
+        else {
+            v.push_back(st.top().second());
+        }
+        st.push(arr[i] , i);
+    }
+    //reverse(v.begin(), v.end());
+    return v;
+}
+
+int main(){
+
+    vector<int> prices = {100, 80, 60, 70, 60, 75, 85};
+    int n = prices.size();
+
+    vector<int> result = nextGreaterElement(prices, n);
+
+    for (int i = 0; i < n; i++) {
+
+        result[i] = i - result[i];
+    }
+
+    for (int i = 0; i < n; i++) {
+
+        cout << result[i] << " ";
+    }
+
+}
+
